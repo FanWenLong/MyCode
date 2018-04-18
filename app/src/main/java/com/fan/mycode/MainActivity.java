@@ -1,9 +1,13 @@
 package com.fan.mycode;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.fan.my2048.MainView;
 
 
 /**
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_one:
+                Intent it = new Intent(MainActivity.this, com.fan.my2048.MainActivity.class);
+                startActivity(it);
                 break;
         }
     }

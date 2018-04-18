@@ -18,6 +18,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.fan.my2048.MainActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
