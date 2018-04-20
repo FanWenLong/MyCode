@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.fan.my2048.MainView;
@@ -15,7 +16,7 @@ import com.fan.my2048.MainView;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView tv_one;
+    Button btn_one, btn_two;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +26,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
-        tv_one = findViewById(R.id.tv_one);
-        tv_one.setOnClickListener(this);
+        btn_one = findViewById(R.id.btn_one);
+        btn_two = findViewById(R.id.btn_two);
+        btn_one.setOnClickListener(this);
+        btn_two.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
+        Intent it = null;
         switch (v.getId()) {
-            case R.id.tv_one:
-                Intent it = new Intent(MainActivity.this, com.fan.my2048.MainActivity.class);
+            case R.id.btn_one:
+                it = new Intent(MainActivity.this, com.fan.my2048.MainActivity.class);
+                startActivity(it);
+                break;
+            case R.id.btn_two:
+                it = new Intent(MainActivity.this, com.yuan2048.MainActivity.class);
                 startActivity(it);
                 break;
         }

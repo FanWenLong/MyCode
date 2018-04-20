@@ -4,9 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <!-- 2048 -->
-    <color name="backGround">#eee</color>
-    <color name="headLeft">#ccc</color>
-    <color name="headRight">#ddd</color>
-    <color name="centerBackground">#ea1</color>
+    <color name="text_white">#f9f6f2</color>
+    <color name="text_black">#776e65</color>
+    <color name="text_brown">#d6cdc4</color>
+    <color name="background">#faf8ef</color>
 </resources>
