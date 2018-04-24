@@ -103,25 +103,18 @@ public class MainView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         //Reset the transparency of the screen
-
         canvas.drawBitmap(background, 0, 0, paint);
-
         drawScoreText(canvas);
-
         if (!game.isActive() && !game.aGrid.isAnimationActive()) {
             drawNewGameButton(canvas, true);
         }
-
         drawCells(canvas);
-
         if (!game.isActive()) {
             drawEndGameState(canvas);
         }
-
         if (!game.canContinue()) {
             drawEndlessText(canvas);
         }
-
         //Refresh the screen if there is still an animation running
         if (game.aGrid.isAnimationActive()) {
             invalidate(startingX, startingY, endingX, endingY);
