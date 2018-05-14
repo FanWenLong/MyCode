@@ -13,6 +13,8 @@ import android.view.View;
 import java.lang.invoke.ConstantCallSite;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+
 /**
  * Created by FanWenLong on 2018/4/18.
  * <p>
@@ -121,8 +123,10 @@ public class MainView extends View {
                 canvas.drawRect(left, top, right, bottom, paint);
                 paint.setColor(Color.WHITE);
                 paint.setTextAlign(Paint.Align.CENTER);
-                paint.setTextSize(gridTextSize);
-                canvas.drawText(grid.value, left + (gridWidth - gridTextSize)/2, right, paint);
+                paint.setTextSize(gridTextSize / 1.5f);
+                Config.L("textSize:" + gridTextSize);
+                Config.L("left=" + left + "---l--" + (left + (gridWidth - gridTextSize) / 2) + "*** top=" + top + " *** " + grid.value);
+                canvas.drawText(grid.value, left + gridTextSize, top + gridTextSize, paint);
             }
         }
     }
@@ -153,7 +157,7 @@ public class MainView extends View {
         centerRight = centerLeft + gridWidth * Config.rowNum;
         centerBottom = centerTop + gridHeight * Config.columnNum;
         //字体大小
-        gridTextSize = Math.max(gridWidth / 4 * 3, gridWidth / (int) paint.measureText("99999"));
+        gridTextSize = Math.max(gridWidth / 5 * 3, (int) paint.measureText("99999"));
     }
 
 }

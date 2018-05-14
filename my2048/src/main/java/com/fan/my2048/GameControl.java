@@ -24,7 +24,7 @@ public class GameControl {
     private GameControl() {
         for (int i = 0; i < Config.rowNum; i++) {
             for (int j = 0; j < Config.columnNum; j++) {
-                gridList.add(new Grid(i, j, "2"));
+                gridList.add(new Grid(i, j, "2048"));
             }
         }
     }

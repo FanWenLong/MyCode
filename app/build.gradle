@@ -27,7 +27,4 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation project(':my2048')
     implementation project(':yuan2048')
-//    debugImplementation project(':my2048')
-//    innerTestImplementation project(':my2048')
-//    releaseImplementation project(':my2048')
 }
