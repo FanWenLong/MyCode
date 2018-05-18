@@ -36,7 +36,7 @@ public class CityActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://kaiyixin.libokai.cn/mobile/index/city";
+                String url = "";
                 CityUtils.getInstance().show(getSupportFragmentManager(), url, new CityUtils.MyOnPickListener() {
                     @Override
                     public void onchoose(City data) {
