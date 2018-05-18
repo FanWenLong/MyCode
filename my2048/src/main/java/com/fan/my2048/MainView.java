@@ -122,11 +122,9 @@ public class MainView extends View {
                 }
                 canvas.drawRect(left, top, right, bottom, paint);
                 paint.setColor(Color.WHITE);
-                paint.setTextAlign(Paint.Align.CENTER);
-                paint.setTextSize(gridTextSize / 1.5f);
-                Config.L("textSize:" + gridTextSize);
-                Config.L("left=" + left + "---l--" + (left + (gridWidth - gridTextSize) / 2) + "*** top=" + top + " *** " + grid.value);
-                canvas.drawText(grid.value, left + gridTextSize, top + gridTextSize, paint);
+//                paint.setTextAlign(Paint.Align.CENTER);
+                paint.setTextSize(gridTextSize);
+                canvas.drawText(grid.value, left + (gridWidth - gridTextSize * grid.value.length() / 2) / 2, top + gridHeight / 2 + gridTextSize / 2, paint);
             }
         }
     }
@@ -157,7 +155,9 @@ public class MainView extends View {
         centerRight = centerLeft + gridWidth * Config.rowNum;
         centerBottom = centerTop + gridHeight * Config.columnNum;
         //字体大小
-        gridTextSize = Math.max(gridWidth / 5 * 3, (int) paint.measureText("99999"));
+        gridTextSize = Math.max(gridWidth / 5 * 2, (int) paint.measureText("9999"));
+        Config.L("测量：" + paint.measureText("9999"));
+        Config.L("gridWidth/5*3：" + gridWidth / 5 * 3);
     }
 
 }

@@ -1,14 +1,12 @@
 package com.fan.mycode;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.fan.my2048.MainView;
+import com.zaaach.citypicker.model.City;
 
 
 /**
@@ -16,7 +14,7 @@ import com.fan.my2048.MainView;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btn_one, btn_two;
+    Button btn_one, btn_two, btn_three;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +26,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initView() {
         btn_one = findViewById(R.id.btn_one);
         btn_two = findViewById(R.id.btn_two);
+        btn_three = findViewById(R.id.btn_three);
         btn_one.setOnClickListener(this);
         btn_two.setOnClickListener(this);
+        btn_three.setOnClickListener(this);
     }
 
     @Override
@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_two:
                 it = new Intent(MainActivity.this, com.yuan2048.MainActivity.class);
                 startActivity(it);
+                break;
+            case R.id.btn_three:
+                CityActivity.toMe(MainActivity.this);
                 break;
         }
     }

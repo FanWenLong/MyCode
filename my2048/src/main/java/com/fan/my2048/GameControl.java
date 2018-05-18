@@ -24,7 +24,10 @@ public class GameControl {
     private GameControl() {
         for (int i = 0; i < Config.rowNum; i++) {
             for (int j = 0; j < Config.columnNum; j++) {
-                gridList.add(new Grid(i, j, "2048"));
+                int[] num = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
+                int p = (int) (Math.random() * 10);
+//                Config.L("p=" + p);
+                gridList.add(new Grid(i, j, "" + num[p]));
             }
         }
     }
