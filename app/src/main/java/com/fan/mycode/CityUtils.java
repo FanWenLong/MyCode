@@ -10,6 +10,7 @@ import com.fan.mycode.net.OkHttpUtils;
 import com.zaaach.citypicker.CityPicker;
 import com.zaaach.citypicker.adapter.OnPickListener;
 import com.zaaach.citypicker.model.City;
+import com.zaaach.citypicker.model.DataSource;
 import com.zaaach.citypicker.model.HotCity;
 import com.zaaach.citypicker.model.LocateState;
 import com.zaaach.citypicker.model.LocatedCity;
@@ -93,6 +94,16 @@ public class CityUtils {
             showDialog(fm, mOnPickListener);
             return;
         }
+
+        if (url == null || url.equals("")) {
+            try {
+                initData(DataSource.Jsondata, fm, mOnPickListener);
+            } catch (JSONException e) {
+                Log.e("1", e.toString());
+            }
+            return;
+        }
+
         OkHttpUtils.getInstance().get(url, new BaseListener() {
             @Override
             public void onFailure(String message) {

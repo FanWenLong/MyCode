@@ -11,23 +11,26 @@ import java.util.List;
 
 public class GameControl {
 
-    private static GameControl gameControl = null;
     public List<Grid> gridList = new ArrayList<Grid>();
+    private MainView mainView;
 
-    public static GameControl newInstance() {
-        if (gameControl == null) {
-            return new GameControl();
-        }
-        return gameControl;
+    public static GameControl newInstance(MainView mainView) {
+        return new GameControl(mainView);
     }
 
-    private GameControl() {
+    private GameControl(MainView mainView) {
+        this.mainView = mainView;
+        gridList = new ArrayList<>();
+        int px = (int) (Math.random() * Config.rowNum);
+        int pj = (int) (Math.random() * Config.columnNum);
         for (int i = 0; i < Config.rowNum; i++) {
             for (int j = 0; j < Config.columnNum; j++) {
-                int[] num = {2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048};
-                int p = (int) (Math.random() * 10);
-//                Config.L("p=" + p);
-                gridList.add(new Grid(i, j, "" + num[p]));
+                if (i == px && j == pj) {
+                    Config.L("i==" + i + "   j=" + j);
+                    gridList.add(new Grid(i, j, "" + 2));
+                } else {
+                    gridList.add(new Grid(i, j, ""));
+                }
             }
         }
     }
@@ -35,9 +38,57 @@ public class GameControl {
     /**
      * 产生新grid
      */
-    public Grid newGrid() {
-        Grid grid = new Grid();
+    public void newGrid() {
+        Grid grid = null;
+        List<Grid> canUse = new ArrayList<>();
+        for (int i = 0; i < Config.rowNum; i++) {
+            for (int j = 0; j < Config.columnNum; j++) {
+                if (gridList.get(i * Config.rowNum + j).value.length() == 0) {
+                    canUse.add(new Grid(i, j, ""));
+                }
+            }
+        }
+        if (canUse.size() == 0) {
+            Config.L("game over");
+            mainView.gameIsOver();
+            return;
+        }
+        //产生新的值
+        int tempValue = (int) (Math.random() * 10);
+        tempValue = tempValue > 8 ? 4 : 2;
+        //随机位置
+        int tempPostion = (int) (Math.random() * canUse.size());
+        grid = canUse.get(tempPostion);
+        grid.value = tempValue + "";
+        //应该
+        grid.showString("应该");
+        gridList.get(grid.x * Config.rowNum + grid.y).setGrid(grid);
+        //现在
+        grid.showString("现在");
+        mainView.postInvalidate();
+    }
 
-        return grid;
+    public void leftMove() {
+        Config.L("left");
+
+        newGrid();
+    }
+
+    public void topMove() {
+        Config.L("top");
+
+        newGrid();
+    }
+
+    public void rightMove() {
+        Config.L("right");
+
+        newGrid();
+    }
+
+    public void bottomMove() {
+        Config.L("bottom");
+
+        newGrid();
     }
 }

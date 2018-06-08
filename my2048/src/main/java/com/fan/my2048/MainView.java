@@ -7,13 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.lang.invoke.ConstantCallSite;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.PREPEND;
 
 /**
  * Created by FanWenLong on 2018/4/18.
@@ -45,6 +49,10 @@ public class MainView extends View {
      */
     private int centerColor;
     /**
+     * 中间结束布局
+     */
+    private int centerGameOverColor;
+    /**
      * 中间坐标
      */
     private int centerLeft, centerTop, centerRight, centerBottom;
@@ -52,6 +60,14 @@ public class MainView extends View {
      * 文字大小
      */
     private int gridTextSize = 0;
+
+    /**
+     * 游戏是否结束
+     */
+    private boolean isOver = false;
+
+    GameControl control;
+    MoveControl moveControl;
 
     public MainView(Context context) {
         super(context);
@@ -61,6 +77,29 @@ public class MainView extends View {
         headColorLeft = resources.getColor(R.color.headLeft);
         headColorRight = resources.getColor(R.color.headRight);
         centerColor = resources.getColor(R.color.centerBackground);
+        centerGameOverColor = resources.getColor(R.color.centerGameOverColor);
+        control = GameControl.newInstance(this);
+        moveControl = new MoveControl(new MoveControl.MoveListener() {
+            @Override
+            public void moveLeft() {
+                control.leftMove();
+            }
+
+            @Override
+            public void moveTop() {
+                control.topMove();
+            }
+
+            @Override
+            public void moveRight() {
+                control.rightMove();
+            }
+
+            @Override
+            public void moveBottom() {
+                control.bottomMove();
+            }
+        });
     }
 
     @Override
@@ -81,6 +120,8 @@ public class MainView extends View {
         drawHead(canvas);
         //画中部
         drawCenter(canvas);
+        //画游戏结果
+        grawResult(canvas);
     }
 
     /**
@@ -102,11 +143,15 @@ public class MainView extends View {
         //画背景
         paint.setColor(centerColor);
         canvas.drawRect(centerLeft, centerTop, centerRight, centerBottom, paint);
+
+        List<Grid> gridList = null;
+        gridList = control.gridList;
+
         //画grid
         for (int i = 0; i < Config.rowNum; i++) {
             for (int j = 0; j < Config.columnNum; j++) {
                 paint.setColor(Color.BLACK);
-                Grid grid = GameControl.newInstance().gridList.get(i * Config.rowNum + j);
+                Grid grid = gridList.get(i * Config.rowNum + j);
                 int left = j * gridWidth + centerLeft + 5;
                 int top = i * gridHeight + centerTop + 5;
                 int right = 0, bottom = 0;
@@ -124,9 +169,31 @@ public class MainView extends View {
                 paint.setColor(Color.WHITE);
 //                paint.setTextAlign(Paint.Align.CENTER);
                 paint.setTextSize(gridTextSize);
+                Config.L("hua:" + "x=" + grid.x + " y=" + grid.y + "  value=" + grid.value);
                 canvas.drawText(grid.value, left + (gridWidth - gridTextSize * grid.value.length() / 2) / 2, top + gridHeight / 2 + gridTextSize / 2, paint);
             }
         }
+    }
+
+    //画游戏结果
+    private void grawResult(Canvas canvas) {
+        if (isOver) {
+            //画背景
+            paint.setColor(centerGameOverColor);
+            canvas.drawRect(centerLeft, centerTop, centerRight, centerBottom, paint);
+
+            paint.setColor(Color.RED);
+            paint.setTextSize(70);
+            paint.setTypeface(Typeface.DEFAULT_BOLD);
+            float w = paint.measureText("游戏结束");
+            canvas.drawText("游戏结束", centerLeft + (centerRight - centerLeft) / 2 - w / 2, centerTop + (centerBottom - centerTop) / 2, paint);
+        }
+    }
+
+    //游戏结束
+    public void gameIsOver() {
+        isOver = true;
+        invalidate();
     }
 
     @Override
@@ -160,4 +227,12 @@ public class MainView extends View {
         Config.L("gridWidth/5*3：" + gridWidth / 5 * 3);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (isOver) {
+            return true;
+        }
+        moveControl.onTouch(event);
+        return true;
+    }
 }

@@ -9,4 +9,5 @@
     <color name="headLeft">#ccc</color>
     <color name="headRight">#ddd</color>
     <color name="centerBackground">#ea1</color>
+    <color name="centerGameOverColor">#99ffffff</color>
 </resources>

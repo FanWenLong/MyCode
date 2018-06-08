@@ -35,8 +35,7 @@ public final class Config {
      * @param msg
      */
     public static void L(String msg) {
-        if (showLog && msg != null) {
-            msg = msg.length() == 0 ? "空信息" : msg;
+        if (showLog && msg != null && msg.length() > 0) {
             Log.e("my2048", msg);
         }
     }

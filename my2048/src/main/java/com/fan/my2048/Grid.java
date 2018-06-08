@@ -27,4 +27,14 @@ public class Grid {
         this.value = value;
     }
 
+    public void setGrid(Grid grid) {
+        this.x = grid.x;
+        this.y = grid.y;
+        this.value = grid.value;
+    }
+
+    public void showString(String tag) {
+        Config.L(tag + ":   x=" + this.x + "   y=" + this.y + "   value=" + this.value);
+    }
+
 }

@@ -3,10 +3,21 @@ package com.fan.mycode;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.fan.my2048.MainView;
+import com.fan.mycode.net.BaseListener;
+import com.fan.mycode.net.OkHttpUtils;
 import com.zaaach.citypicker.model.City;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
