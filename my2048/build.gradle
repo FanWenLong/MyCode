@@ -5,7 +5,6 @@ android {
     compileSdkVersion 27
 
 
-
     defaultConfig {
 //        applicationId "com.fan.my2048"
         minSdkVersion 19

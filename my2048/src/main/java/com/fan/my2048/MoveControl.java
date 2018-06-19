@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 
 /**
  * Created by FanWenLong on 2018/6/6.
+ * 滑动处理
  */
 public class MoveControl {
 

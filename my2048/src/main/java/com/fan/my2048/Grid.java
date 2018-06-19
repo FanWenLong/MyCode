@@ -18,6 +18,11 @@ public class Grid {
      */
     public String value;
 
+    /**
+     * 是否合成过
+     */
+    public boolean isMergin = false;
+
     public Grid() {
     }
 

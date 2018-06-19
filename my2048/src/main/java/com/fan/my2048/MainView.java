@@ -79,27 +79,7 @@ public class MainView extends View {
         centerColor = resources.getColor(R.color.centerBackground);
         centerGameOverColor = resources.getColor(R.color.centerGameOverColor);
         control = GameControl.newInstance(this);
-        moveControl = new MoveControl(new MoveControl.MoveListener() {
-            @Override
-            public void moveLeft() {
-                control.leftMove();
-            }
-
-            @Override
-            public void moveTop() {
-                control.topMove();
-            }
-
-            @Override
-            public void moveRight() {
-                control.rightMove();
-            }
-
-            @Override
-            public void moveBottom() {
-                control.bottomMove();
-            }
-        });
+        moveControl = new MoveControl(control);
     }
 
     @Override
@@ -131,9 +111,15 @@ public class MainView extends View {
         //画左边
         paint.setColor(headColorLeft);
         canvas.drawRect(0, 0, headWidth / Config.headWeight, headHeight, paint);
+        paint.setTextSize(gridTextSize * 1.5f);
+        paint.setColor(Color.RED);
+        canvas.drawText("2048", 40, headHeight / 2, paint);
         //画右边
         paint.setColor(headColorRight);
         canvas.drawRect(headWidth / Config.headWeight, 0, headWidth, headHeight, paint);
+        paint.setTextSize(gridTextSize * 0.7f);
+        paint.setColor(Color.BLUE);
+        canvas.drawText("当前分数: " + control.curScore, (headWidth - headWidth / Config.headWeight) / 1.5f, headHeight / 1.5f, paint);
     }
 
     /**
