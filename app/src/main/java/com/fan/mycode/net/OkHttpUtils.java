@@ -21,6 +21,7 @@ import okhttp3.Callback;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -127,6 +128,25 @@ public class OkHttpUtils {
                                 .newBuilder()
 //                                .addHeader("user-agent", "Android")
                                 .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .build();
+    }
+
+    /**
+     * 设置请求头,会覆盖同名请求头。
+     */
+    public void setHeaders(final Map<String, String> headers) {
+        mClient = mClient.newBuilder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request.Builder builder = chain.request().newBuilder();
+                        for (String name : headers.keySet()) {
+                            builder.header(name, headers.get(name));
+                        }
+                        Request request = builder.build();
                         return chain.proceed(request);
                     }
                 })

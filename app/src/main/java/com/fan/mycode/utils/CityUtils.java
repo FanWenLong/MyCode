@@ -1,10 +1,10 @@
-package com.fan.mycode;
+package com.fan.mycode.utils;
 
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.fan.mycode.R;
 import com.fan.mycode.net.BaseListener;
 import com.fan.mycode.net.OkHttpUtils;
 import com.zaaach.citypicker.CityPicker;

@@ -1,4 +1,4 @@
-package com.fan.mycode;
+package com.fan.mycode.utils;
 
 import android.app.Activity;
 import android.content.Context;
