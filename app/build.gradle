@@ -41,5 +41,6 @@ dependencies {
     implementation project(':my2048')
     implementation project(':yuan2048')
     implementation project(':CityPicker')
+    implementation project(':slideutils')
 
 }

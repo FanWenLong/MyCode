@@ -1,1 +1,1 @@
-include ':app', ':my2048', ':yuan2048',":CityPicker"
+include ':app', ':my2048', ':yuan2048', ':slideutils',":CityPicker"
