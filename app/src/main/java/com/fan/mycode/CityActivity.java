@@ -52,52 +52,53 @@ public class CityActivity extends AppCompatActivity {
 
             }
         });
-//        sliding_city.setSlidingLayoutListener(new SlidingLayoutListener() {
-//            @Override
-//            public void onLeftSlidingFinish() {
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onLeftSlidingFinish");
-//                }
-//            }
-//
-//            @Override
-//            public void onRightSlidingFinish() {
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onRightSlidingFinish");
-//                }
-//            }
-//
-//            @Override
-//            public void onLeftSliding() {
-//                super.onLeftSliding();
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onLeftSliding");
-//                }
-//            }
-//
-//            @Override
-//            public void onLeftSlidingCancle() {
-//                super.onLeftSlidingCancle();
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onLeftSlidingCancle");
-//                }
-//            }
-//
-//            @Override
-//            public void onRightSliding() {
-//                super.onRightSliding();
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onRightSliding");
-//                }
-//            }
-//
-//            @Override
-//            public void onRightSlidingCancle() {
-//                super.onRightSlidingCancle();
-//                if (BuildConfig.DEBUG) {
-//                    Log.e(this.getClass().toString(), "----------------onRightSlidingCancle");
-//                }
-//            }
-//        });
+        sliding_city.setSlidingLayoutListener(new SlidingLayoutListener() {
+            @Override
+            public void onLeftSlidingFinish() {
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onLeftSlidingFinish");
+                }
+                finish();
+            }
+
+            @Override
+            public void onRightSlidingFinish() {
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onRightSlidingFinish");
+                }
+            }
+
+            @Override
+            public void onLeftSliding() {
+                super.onLeftSliding();
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onLeftSliding");
+                }
+            }
+
+            @Override
+            public void onLeftSlidingCancle() {
+                super.onLeftSlidingCancle();
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onLeftSlidingCancle");
+                }
+            }
+
+            @Override
+            public void onRightSliding() {
+                super.onRightSliding();
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onRightSliding");
+                }
+            }
+
+            @Override
+            public void onRightSlidingCancle() {
+                super.onRightSlidingCancle();
+                if (BuildConfig.DEBUG) {
+                    Log.e(this.getClass().toString(), "----------------onRightSlidingCancle");
+                }
+            }
+        });
     }
 }

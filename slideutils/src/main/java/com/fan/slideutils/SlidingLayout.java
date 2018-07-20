@@ -22,10 +22,6 @@ public class SlidingLayout extends RelativeLayout {
     private final int RIGHT_TO_LEFT = 2;
 
     /**
-     * 此控件的父布局。
-     */
-    private ViewGroup parent;
-    /**
      * 滑动监听
      */
     private SlidingLayoutListener slidingLayoutListener;
@@ -44,25 +40,25 @@ public class SlidingLayout extends RelativeLayout {
     private int parentWidth;
 
     /**
-     * 按下位置的坐标：x
+     * 当前的x坐标
      */
-    private int downX;
+    private int curX;
     /**
-     * 按下位置的坐标：y
+     * 当前的y坐标
      */
-    private int downY;
+    private int curY;
     /**
-     * x坐标的临时存储值
+     * 上次的x坐标
      */
-    private int tempX = 0;
+    private int lastX = 0;
+    /**
+     * 上次的y坐标
+     */
+    private int lastY = 0;
     /**
      * 最小滑动的距离
      */
     private int minCanScroll;
-    /**
-     * 是否滑动中
-     */
-    private boolean isSilding;
     /**
      * 手指是向右滑
      */
@@ -82,6 +78,9 @@ public class SlidingLayout extends RelativeLayout {
         minCanScroll = ViewConfiguration.get(context).getScaledTouchSlop();
         scroller = new Scroller(context);
         tracker = VelocityTracker.obtain();
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, "最小滑动距离，minCanScroll=" + minCanScroll);
+        }
     }
 
     /**
@@ -95,7 +94,6 @@ public class SlidingLayout extends RelativeLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
         if (changed) {
-            parent = (ViewGroup) this.getParent();
             parentWidth = this.getWidth();
         }
     }
@@ -103,26 +101,31 @@ public class SlidingLayout extends RelativeLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         tracker.addMovement(event);
-        downX = (int) event.getRawX();
-        downY = (int) event.getRawY();
+        curX = (int) event.getRawX();
+        curY = (int) event.getRawY();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //获取点击的屏幕的位置
-                tempX = (int) event.getRawX();
+                lastX = curX;
+                lastY = curY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                int deltaX = tempX - downX;
-                //x轴滑动距离大于最下滑动距离 并且 y轴滑动距离小于最下滑动距离，即水平方向滑动
-                if (Math.abs(deltaX) > minCanScroll
-                        && Math.abs((int) event.getRawY() - downY) < minCanScroll) {
-                    isSilding = true;
-                    if (deltaX > 0) {
+                int deltaX = lastX - curX;
+                int deltaY = lastY - curY;
+                //x轴滑动距离大于0 并且 y轴滑动距离小于最下滑动距离
+                if (Math.abs(deltaX) >= 0
+                        && Math.abs(deltaY) < minCanScroll * 2) {
+                    if (BuildConfig.DEBUG) {
+                        Log.e(TAG, "deltaX=" + deltaX + "  deltaY=" + deltaY);
+                    }
+                    if (deltaX >= 0) {
                         curDirection = RIGHT_TO_LEFT;
                     } else {
                         curDirection = LEFT_TO_RIGHT;
                     }
                     //开始滑动
-                    parent.scrollBy(deltaX, 0);
+                    scrollBy(deltaX, 0);
                     //触发监听
                     if (slidingLayoutListener != null) {
                         if (curDirection == LEFT_TO_RIGHT) {
@@ -131,25 +134,26 @@ public class SlidingLayout extends RelativeLayout {
                             slidingLayoutListener.onRightSliding();
                         }
                     }
-                } else {
-                    isSilding = false;
-                    scroller.abortAnimation();
+                } else { //纵向滑动
+
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                tracker.computeCurrentVelocity(500);
+                tracker.computeCurrentVelocity(1000);
                 float xVelocity = tracker.getXVelocity();
                 if (BuildConfig.DEBUG) {
                     Log.e(TAG, "横向滑动速度：" + xVelocity);
                 }
-                if (Math.abs(xVelocity) > 200) {
+                if (Math.abs(xVelocity) > 1000) {
                     //继续滑动
                     scrollEnd();
                     tracker.clear();
                     break;
+                } else {
+                    tracker.clear();
                 }
                 //滑动距离不超过一半的时候，认为取消
-                if (Math.abs(parent.getScrollX()) <= (parentWidth / 2)) {
+                if (Math.abs(getScrollX()) <= (parentWidth / 2)) {
                     //滑动回原位
                     scrollOrigin();
                 } else {
@@ -158,7 +162,8 @@ public class SlidingLayout extends RelativeLayout {
                 }
                 break;
         }
-        tempX = downX;
+        lastX = curX;
+        lastY = curY;
         return true;
     }
 
@@ -167,7 +172,7 @@ public class SlidingLayout extends RelativeLayout {
      */
     private void scrollOrigin() {
         isCancle = true;
-        int delta = parent.getScrollX();
+        int delta = getScrollX();
         scroller.startScroll(delta, 0, -delta, 0, Math.abs(delta));
         invalidate();
     }
@@ -177,7 +182,7 @@ public class SlidingLayout extends RelativeLayout {
      */
     private void scrollEnd() {
         isCancle = false;
-        int delta = parent.getScrollX();
+        int delta = getScrollX();
         if (curDirection == LEFT_TO_RIGHT) {
             scroller.startScroll(delta, 0, delta - parentWidth, 0, Math.abs(delta - parentWidth));
         } else if (curDirection == RIGHT_TO_LEFT) {
@@ -189,28 +194,30 @@ public class SlidingLayout extends RelativeLayout {
     @Override
     public void computeScroll() {
         super.computeScroll();
-        if (scroller.isFinished()) {
-            isSilding = false;
-            if (slidingLayoutListener != null) {
-                if (isCancle) {
-                    if (curDirection == LEFT_TO_RIGHT) {
-                        slidingLayoutListener.onLeftSlidingCancle();
-                    } else if (curDirection == RIGHT_TO_LEFT) {
-                        slidingLayoutListener.onRightSlidingCancle();
-                    }
-                } else {
-                    if (curDirection == LEFT_TO_RIGHT) {
-                        slidingLayoutListener.onLeftSlidingFinish();
-                    } else if (curDirection == RIGHT_TO_LEFT) {
-                        slidingLayoutListener.onRightSlidingFinish();
+        //没有结束滑动
+        if (scroller.computeScrollOffset()) {
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "computeScroll，scroller.getCurrX()=" + scroller.getCurrX());
+            }
+            scrollTo(scroller.getCurrX(), scroller.getCurrY());
+            invalidate();
+            if (scroller.isFinished()) {
+                if (slidingLayoutListener != null) {
+                    if (isCancle) {
+                        if (curDirection == LEFT_TO_RIGHT) {
+                            slidingLayoutListener.onLeftSlidingCancle();
+                        } else if (curDirection == RIGHT_TO_LEFT) {
+                            slidingLayoutListener.onRightSlidingCancle();
+                        }
+                    } else {
+                        if (curDirection == LEFT_TO_RIGHT) {
+                            slidingLayoutListener.onLeftSlidingFinish();
+                        } else if (curDirection == RIGHT_TO_LEFT) {
+                            slidingLayoutListener.onRightSlidingFinish();
+                        }
                     }
                 }
             }
-        }
-        //没有结束滑动
-        if (scroller.computeScrollOffset()) {
-            parent.scrollTo(scroller.getCurrX(), scroller.getCurrY());
-            invalidate();
         }
     }
 }
