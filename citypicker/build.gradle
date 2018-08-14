@@ -29,7 +29,7 @@ dependencies {
     })
     compileOnly 'com.android.support:appcompat-v7:27.1.1'
     testImplementation 'junit:junit:4.12'
-    api 'com.android.support:recyclerview-v7:27.1.1'
+    compileOnly 'com.android.support:recyclerview-v7:27.1.1'
 }
 
 

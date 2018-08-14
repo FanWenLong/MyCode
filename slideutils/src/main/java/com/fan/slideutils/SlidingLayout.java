@@ -66,8 +66,20 @@ public class SlidingLayout extends RelativeLayout {
     /**
      * 是否取消
      */
-    private boolean isCancle = false;
+    private boolean isCancel = false;
 
+    /**
+     * 向右滑动是否可以有动画
+     */
+    private boolean leftAnimate = true;
+    /**
+     * 向左滑动是否可以有动画
+     */
+    private boolean rightAnimate = true;
+    /**
+     * 滑动是否完成
+     */
+    private boolean isFinish = true;
 
     public SlidingLayout(Context context) {
         this(context, null);
@@ -90,6 +102,22 @@ public class SlidingLayout extends RelativeLayout {
         this.slidingLayoutListener = slidingLayoutListener;
     }
 
+    public boolean isLeftAnimate() {
+        return leftAnimate;
+    }
+
+    public void setLeftAnimate(boolean leftAnimate) {
+        this.leftAnimate = leftAnimate;
+    }
+
+    public boolean isRightAnimate() {
+        return rightAnimate;
+    }
+
+    public void setRightAnimate(boolean rightAnimate) {
+        this.rightAnimate = rightAnimate;
+    }
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
@@ -103,9 +131,12 @@ public class SlidingLayout extends RelativeLayout {
         tracker.addMovement(event);
         curX = (int) event.getRawX();
         curY = (int) event.getRawY();
-
+        if (!isFinish) {
+            return true;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                isCancel = false;
                 //获取点击的屏幕的位置
                 lastX = curX;
                 lastY = curY;
@@ -117,21 +148,37 @@ public class SlidingLayout extends RelativeLayout {
                 if (Math.abs(deltaX) >= 0
                         && Math.abs(deltaY) < minCanScroll * 2) {
                     if (BuildConfig.DEBUG) {
-                        Log.e(TAG, "deltaX=" + deltaX + "  deltaY=" + deltaY);
+                        Log.e(TAG, "deltaX=" + deltaX + "  deltaY=" + deltaY + "  getScrollX=" + getScrollX());
                     }
-                    if (deltaX >= 0) {
-                        curDirection = RIGHT_TO_LEFT;
+                    //判断实际方向
+                    if (leftAnimate || rightAnimate) {
+                        if (getScrollX() > 0) {
+                            curDirection = RIGHT_TO_LEFT;
+                        } else {
+                            curDirection = LEFT_TO_RIGHT;
+                        }
                     } else {
-                        curDirection = LEFT_TO_RIGHT;
+                        if (deltaX > 0) {
+                            curDirection = RIGHT_TO_LEFT;
+                        } else {
+                            curDirection = LEFT_TO_RIGHT;
+                        }
                     }
-                    //开始滑动
-                    scrollBy(deltaX, 0);
-                    //触发监听
-                    if (slidingLayoutListener != null) {
-                        if (curDirection == LEFT_TO_RIGHT) {
-                            slidingLayoutListener.onLeftSliding();
-                        } else if (curDirection == RIGHT_TO_LEFT) {
-                            slidingLayoutListener.onRightSliding();
+
+                    if (curDirection == LEFT_TO_RIGHT) {
+                        if (leftAnimate) {
+                            scrollBy(deltaX, 0);
+                            if (BuildConfig.DEBUG) {
+                                Log.e(TAG, "move --> scrollBy:" + curDirection);
+                            }
+                        }
+                    }
+                    if (curDirection == RIGHT_TO_LEFT) {
+                        if (rightAnimate) {
+                            scrollBy(deltaX, 0);
+                            if (BuildConfig.DEBUG) {
+                                Log.e(TAG, "move --> scrollBy:" + curDirection);
+                            }
                         }
                     }
                 } else { //纵向滑动
@@ -144,11 +191,15 @@ public class SlidingLayout extends RelativeLayout {
                 if (BuildConfig.DEBUG) {
                     Log.e(TAG, "横向滑动速度：" + xVelocity);
                 }
-                if (Math.abs(xVelocity) > 1000) {
-                    //继续滑动
-                    scrollEnd();
+                if (Math.abs(xVelocity) > 2000) {
+                    if (curDirection == LEFT_TO_RIGHT && xVelocity > 0 ||
+                            curDirection == RIGHT_TO_LEFT && xVelocity < 0) {
+                        //继续滑动
+                        scrollEnd();
+                        tracker.clear();
+                        break;
+                    }
                     tracker.clear();
-                    break;
                 } else {
                     tracker.clear();
                 }
@@ -171,8 +222,11 @@ public class SlidingLayout extends RelativeLayout {
      * 滑动回原位
      */
     private void scrollOrigin() {
-        isCancle = true;
+        isCancel = true;
         int delta = getScrollX();
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, "scrollOrigin --> getScrollX:" + delta);
+        }
         scroller.startScroll(delta, 0, -delta, 0, Math.abs(delta));
         invalidate();
     }
@@ -181,12 +235,15 @@ public class SlidingLayout extends RelativeLayout {
      * 完成滑动
      */
     private void scrollEnd() {
-        isCancle = false;
+        isCancel = false;
         int delta = getScrollX();
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, "scrollEnd --> getScrollX:" + delta);
+        }
         if (curDirection == LEFT_TO_RIGHT) {
-            scroller.startScroll(delta, 0, delta - parentWidth, 0, Math.abs(delta - parentWidth));
+            scroller.startScroll(delta, 0, -(parentWidth + delta), 0, Math.abs(parentWidth + delta));
         } else if (curDirection == RIGHT_TO_LEFT) {
-            scroller.startScroll(delta, 0, parentWidth - delta, 0, Math.abs(delta));
+            scroller.startScroll(delta, 0, parentWidth - delta, 0, Math.abs(parentWidth - delta));
         }
         invalidate();
     }
@@ -199,11 +256,13 @@ public class SlidingLayout extends RelativeLayout {
             if (BuildConfig.DEBUG) {
                 Log.e(TAG, "computeScroll，scroller.getCurrX()=" + scroller.getCurrX());
             }
+            isFinish = false;
             scrollTo(scroller.getCurrX(), scroller.getCurrY());
             invalidate();
             if (scroller.isFinished()) {
+                isFinish = true;
                 if (slidingLayoutListener != null) {
-                    if (isCancle) {
+                    if (isCancel) {
                         if (curDirection == LEFT_TO_RIGHT) {
                             slidingLayoutListener.onLeftSlidingCancle();
                         } else if (curDirection == RIGHT_TO_LEFT) {

@@ -27,6 +27,10 @@
     </style>
 
     <style name="DefaultCityPickerTheme" parent="AppTheme">
+
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+
         <item name="cpCancelTextSize">@dimen/cp_cancel_text_size</item>
         <item name="cpCancelTextColor">@color/cp_color_gray</item>
 

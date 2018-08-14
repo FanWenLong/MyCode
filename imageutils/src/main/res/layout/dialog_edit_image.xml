@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_top_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_half_transparent">
+
+        <Button
+            android:id="@+id/btn_save_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存为图片" />
+
+        <Button
+            android:id="@+id/btn_cancel_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="取消" />
+
+    </RelativeLayout>
+
+    <com.fan.imageutils.EditImageView
+        android:id="@+id/eiv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_bottom_dialog"
+        android:layout_below="@id/rl_top_dialog"
+        android:background="@color/white" />
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_half_transparent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_color_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="颜色" />
+
+            <Button
+                android:id="@+id/btn_width_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="粗细" />
+
+            <Button
+                android:id="@+id/btn_undo_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="撤销" />
+
+            <Button
+                android:id="@+id/btn_redo_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="还原" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_above="@id/rl_bottom_dialog"
+        android:background="@color/black_half_transparent"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_width_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <SeekBar
+        android:id="@+id/seek_width_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_above="@id/rl_bottom_dialog"
+        android:layout_marginBottom="10dp"
+        android:max="100"
+        android:visibility="gone" />
+
+</RelativeLayout>

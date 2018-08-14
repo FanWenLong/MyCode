@@ -7,12 +7,6 @@ package com.fan.slideutils;
  */
 public abstract class SlidingLayoutListener {
     /**
-     * 手指向右滑动：滑动中
-     */
-    public void onLeftSliding() {
-    }
-
-    /**
      * 手指向右滑动：滑动结束
      */
     public abstract void onLeftSlidingFinish();
@@ -21,12 +15,6 @@ public abstract class SlidingLayoutListener {
      * 手指向右滑动：取消
      */
     public void onLeftSlidingCancle() {
-    }
-
-    /**
-     * 手指向左滑动：滑动中
-     */
-    public void onRightSliding() {
     }
 
     /**

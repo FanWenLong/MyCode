@@ -4,31 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_one"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="我的2048"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btn_two"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="原著2048"
-        android:textSize="16sp" />
-
-    <Button
-        android:id="@+id/btn_three"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="城市选择"
-        android:textSize="16sp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
