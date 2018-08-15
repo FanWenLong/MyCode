@@ -83,6 +83,16 @@
                 android:padding="10dp"
                 android:text="还原" />
 
+            <Button
+                android:id="@+id/btn_clear_dialog"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="清空" />
+
         </LinearLayout>
     </RelativeLayout>
 

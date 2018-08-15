@@ -16,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -46,7 +45,7 @@ public class EditImageDialog extends DialogFragment {
     private RecyclerView recyclerView_dialog;
     private Button btn_cancel_dialog;
     private Button btn_color_dialog, btn_width_dialog;
-    private Button btn_undo_dialog, btn_redo_dialog;
+    private Button btn_undo_dialog, btn_redo_dialog, btn_clear_dialog;
     private TextView tv_width_dialog;
     private MyAdapter colorAdapter;
     private SeekBar seek_width_dialog;
@@ -67,6 +66,7 @@ public class EditImageDialog extends DialogFragment {
 
         btn_undo_dialog = view.findViewById(R.id.btn_undo_dialog);
         btn_redo_dialog = view.findViewById(R.id.btn_redo_dialog);
+        btn_clear_dialog = view.findViewById(R.id.btn_clear_dialog);
         return view;
     }
 
@@ -138,6 +138,13 @@ public class EditImageDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 eiv.redo();
+            }
+        });
+        //清空
+        btn_clear_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eiv.clear();
             }
         });
         //调节宽度

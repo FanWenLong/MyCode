@@ -32,8 +32,13 @@ public class EditImageView extends AppCompatImageView {
         initView();
     }
 
+    public EditImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initView();
+    }
+
     public static final int INIT_COLOR = Color.BLACK;
-    public static final float INIT_WIDTH = 10f;
+    public static final float INIT_WIDTH = 15f;
     /**
      * 是否使用二级缓存
      */
@@ -60,6 +65,9 @@ public class EditImageView extends AppCompatImageView {
      */
     DrawPath curPath;
 
+    float lastX;
+    float lastY;
+
     /**
      * 初始化
      */
@@ -69,7 +77,7 @@ public class EditImageView extends AppCompatImageView {
         paint = new Paint();
         curPath = new DrawPath();
         curPath.setColor(Color.BLACK);
-        curPath.setWidth(5f);
+        curPath.setWidth(INIT_WIDTH);
         curPath.setPath(new Path());
     }
 
@@ -128,6 +136,16 @@ public class EditImageView extends AppCompatImageView {
         invalidate();
     }
 
+    /**
+     * 清空
+     */
+    public void clear() {
+        cacheCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
+        pathList.clear();
+        cancelList.clear();
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -177,10 +195,16 @@ public class EditImageView extends AppCompatImageView {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                lastX = event.getX();
+                lastY = event.getY();
                 curPath.getPath().moveTo(event.getX(), event.getY());
                 break;
             case MotionEvent.ACTION_MOVE:
-                curPath.getPath().lineTo(event.getX(), event.getY());
+                //这里终点设为两点的中心点的目的在于使绘制的曲线更平滑，如果终点直接设置为x,y，效果和lineto是一样的,实际是折线效果
+                curPath.getPath().quadTo(lastX, lastY, (event.getX() + lastX) / 2, (event.getY() + lastY) / 2);
+//                curPath.getPath().lineTo(event.getX(), event.getY());
+                lastX = event.getX();
+                lastY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
                 pathList.add(curPath);
